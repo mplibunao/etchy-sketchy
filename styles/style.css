@@ -15,6 +15,11 @@
 }
 
 
+.gridBox{
+	display:inline-block;
+}
+
+
 input[name=clearGrid]
 {
 	border: 1px solid #4387fd;

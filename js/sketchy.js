@@ -37,8 +37,8 @@ $(document).ready(function(){
 	// Get container height and width;
 	containerHeight = +$('#grid-container').height();
 	containerWidth = +$('#grid-container').width();
-	//console.log("containerHeight : " + containerHeight);
-	//console.log('containerWidth : ' + containerWidth);
+	console.log("containerHeight : " + containerHeight);
+	console.log('containerWidth : ' + containerWidth);
 	generateGrid(defaultGridSize);
 	initEventHandler();
 
@@ -57,12 +57,26 @@ var generateGrid = function(gridNumber){
 
 	//generate the grid
 	//update: moved the div outside the loop to hopefully improve performance when creating a huge grid
-	var gridBoxDiv = '<div class="gridBox" style ="display:inline-block; height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
+	var gridBoxDiv = '<div class="gridBox" style ="height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
+	//slice string I can add id=rowx on the first column
+	var splitIndex = gridBoxDiv.indexOf('class');
+	splitIndex -= 1; //so that index points to the space before class not 'c' of class
+	//slice(0,4) in this case and slice(4,gridBoxDiv.length) for the second string
+	var firstDiv = gridBoxDiv.slice(0,splitIndex);
+	var secondDiv = gridBoxDiv.slice(splitIndex,gridBoxDiv.length);
+
+
+
 	//for loop for row
 	for (var i=0; i<gridNumber; i++){
 		//for loop for the column
 		for(var j=0; j<gridNumber; j++){
-			$('#grid-container').append(gridBoxDiv);
+			//add if statement that checks if it is the first column; if yes then add id = rownumber;
+			if (j==0){
+				$('#grid-container').append(firstDiv +' id=row'+ i + secondDiv);
+			} else{ // if not first column then append the div normally
+				$('#grid-container').append(gridBoxDiv);
+			}
 		}
 	}
 }
