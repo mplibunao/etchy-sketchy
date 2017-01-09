@@ -1,5 +1,4 @@
-$(document).ready(function(){
-	/*
+/*
 		1. Create a 16x16 grid using divs
 		Solve for the height and width variable of each individual grid
 		Get main container height and width
@@ -22,17 +21,34 @@ $(document).ready(function(){
 			$(this).css({'background', ''});
 		});
 
+		3. Add clear grid functionality which lets the user enter a new grid specification (max: 64x64)
+
 	*/
 
-	// Step #1 Generate the 16x16 grid
 
-	//set Grid Number; Get container height and width;
-	var gridNumber = 16;
-	var containerHeight = +$('#grid-container').height();
-	var containerWidth = +$('#grid-container').width();
-	console.log("containerHeight : " + containerHeight);
-	console.log('containerWidth : ' + containerWidth);
+//global variables
+var defaultGridSize = 16; //default grid size 16x16
+//initialize container height and width
+var containerHeight=0;
+var containerWidth=0;
 
+
+$(document).ready(function(){
+	// Get container height and width;
+	containerHeight = +$('#grid-container').height();
+	containerWidth = +$('#grid-container').width();
+	//console.log("containerHeight : " + containerHeight);
+	//console.log('containerWidth : ' + containerWidth);
+	generateGrid(defaultGridSize);
+	initEventHandler();
+
+	});
+	
+
+// Step #1 Generate the 16x16 grid
+
+var generateGrid = function(gridNumber){
+	
 	//compute the height and width of the individual grid boxes
 	var divHeight = containerHeight / gridNumber;
 	var divWidth = containerWidth / gridNumber;
@@ -40,13 +56,20 @@ $(document).ready(function(){
 	console.log('div Width = ' + divWidth);
 
 	//generate the grid
-	for(var i=0; i<gridNumber;i++){
+	//for loop for row
+	for (var i=0; i<gridNumber; i++){
+		//for loop for the column
 		for(var j=0; j<gridNumber; j++){
-			$('#grid-container').append('<div class="gridBox" style = "display:inline-block ; height: ' + divHeight +'px; width: ' + divWidth + 'px;">'+j+'</div>');
+			$('#grid-container').append('<div class="gridBox" style = "display:inline-block ; height: ' + divHeight +'px; width: ' + divWidth + 'px;"></div>');
 		}
 	}
+}
 	
-	// Step #2 : Trailing colors
+
+	
+	
+	
+// Step #2 : Trailing colors
 
 	//generate padding to add before the hex if less than 6 digits
 	var generateHexPadding = function(padNum){
@@ -87,9 +110,20 @@ $(document).ready(function(){
 		return "#" + hex;
 	}
 
-	$('#grid-container').on('mouseenter','.gridBox',function(){
-		$(this).css({'background': getRandomColor()});
-	});
+	//event handler for drawing on hover
+	var initEventHandler = function(){
+		$('#grid-container').on('mouseenter','.gridBox',function(){
+			$(this).css({'background': getRandomColor()});
+		});
+	}
+	
 
+//Step # 3 : Clear and Reset Grid
 
-});
+	var clearGrid = function(){
+		var newGridNumber = prompt('What grid size would you like? (Max:64)');
+		$('#grid-container').empty();
+		generateGrid(newGridNumber);
+		initEventHandler();
+	}
+
