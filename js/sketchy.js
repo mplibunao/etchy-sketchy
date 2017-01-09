@@ -58,7 +58,9 @@ var generateGrid = function(gridNumber){
 	//generate the grid
 	//update: moved the div outside the loop to hopefully improve performance when creating a huge grid
 	var gridBoxDiv = '<div class="gridBox" style ="height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
-	//slice string I can add id=rowx on the first column
+	/*for testing
+	slice string I can add id=rowx on the first column
+	*/
 	var splitIndex = gridBoxDiv.indexOf('class');
 	splitIndex -= 1; //so that index points to the space before class not 'c' of class
 	//slice(0,4) in this case and slice(4,gridBoxDiv.length) for the second string

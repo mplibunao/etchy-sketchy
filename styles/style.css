@@ -16,7 +16,11 @@
 
 
 .gridBox{
-	display:inline-block;
+	
+	border:none;
+	margin: 0;
+	padding: 0;
+	float: left;
 }
 
 
