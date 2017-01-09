@@ -56,11 +56,13 @@ var generateGrid = function(gridNumber){
 	console.log('div Width = ' + divWidth);
 
 	//generate the grid
+	//update: moved the div outside the loop to hopefully improve performance when creating a huge grid
+	var gridBoxDiv = '<div class="gridBox" style ="display:inline-block; height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
 	//for loop for row
 	for (var i=0; i<gridNumber; i++){
 		//for loop for the column
 		for(var j=0; j<gridNumber; j++){
-			$('#grid-container').append('<div class="gridBox" style = "display:inline-block ; height: ' + divHeight +'px; width: ' + divWidth + 'px;"></div>');
+			$('#grid-container').append(gridBoxDiv);
 		}
 	}
 }
@@ -112,6 +114,13 @@ var generateGrid = function(gridNumber){
 
 	//event handler for drawing on hover
 	var initEventHandler = function(){
+		/*update: changed initial selector from $('#grid-container') to directly $(.gridBox)
+		because the event handler is not removed along with gridbox since the selector used is
+		actually the container. Not sure if there is any performance gain
+
+		update2: moved it back. slower load times and event not working for some reason.
+		gonna remove the event manually at the clearGrid function instead with off()
+		*/
 		$('#grid-container').on('mouseenter','.gridBox',function(){
 			$(this).css({'background': getRandomColor()});
 		});
@@ -122,7 +131,9 @@ var generateGrid = function(gridNumber){
 
 	var clearGrid = function(){
 		var newGridNumber = prompt('What grid size would you like? (Max:64)');
-		$('#grid-container').empty();
+		//update: used remove() instead of empty() cause I think the classes are not removed
+		//update: changed back to empty. It is faster. lol - http://blog.nictunney.com/2011/02/jquery-remove-performance-issues.html
+		$('#grid-container').empty().off('mouseenter');
 		generateGrid(newGridNumber);
 		initEventHandler();
 	}
