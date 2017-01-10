@@ -57,7 +57,7 @@ var generateGrid = function(gridNumber){
 
 	//generate the grid
 	//update: moved the div outside the loop to hopefully improve performance when creating a huge grid
-	var gridBoxDiv = '<div class="gridBox" style ="height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
+	var gridBoxDiv = '<div class="gridBox" data-opacity="0.4" style ="height:' + divHeight +'px; width:' + divWidth + 'px;"></div>';
 	/*for testing
 	slice string I can add id=rowx on the first column
 	*/
@@ -83,9 +83,6 @@ var generateGrid = function(gridNumber){
 	}
 }
 	
-
-	
-	
 	
 // Step #2 : Trailing colors
 
@@ -101,6 +98,7 @@ var generateGrid = function(gridNumber){
 
 	//generate random color
 	var getRandomColor = function(){
+
 		var hex = Math.floor(Math.random() * 0xFFFFFF);
 		
 		/* toString(16) converts number to hexadecimal;
@@ -127,6 +125,10 @@ var generateGrid = function(gridNumber){
 		//console.log('returning #'+hex);
 		return "#" + hex;
 	}
+	
+
+
+
 
 	//event handler for drawing on hover
 	var initEventHandler = function(){
@@ -137,8 +139,30 @@ var generateGrid = function(gridNumber){
 		update2: moved it back. slower load times and event not working for some reason.
 		gonna remove the event manually at the clearGrid function instead with off()
 		*/
+		
 		$('#grid-container').on('mouseenter','.gridBox',function(){
-			$(this).css({'background': getRandomColor()});
+			//get current color of gridBox. If it's transparent then generate random color else change shadeColor
+			var currentColor = $(this).css("background-color");
+			//init opacity
+			var opacity=0.4;
+			
+			//if white or transparent then generate random color
+			if (currentColor=="transparent")
+			{
+				opacity = $(this).data('opacity');
+				$(this).css({'background': getRandomColor(), 'opacity': opacity});
+			} else if ( +$(this).data('opacity') < 0.90000){
+				//if opacity < 1.0 then add more opacity and randomize color
+				opacity = +$(this).data('opacity');
+				opacity+=.1;
+				console.log('opacity: '+opacity);
+				$(this).css({'background': getRandomColor(), 'opacity': opacity});
+				$(this).data('opacity',opacity);
+			//if opacity is maxed out, make the color black
+			} else if ( +$(this).data('opacity') == 0.9999999999999999){
+				$(this).css({'background':'#000000'});
+			}
+			
 		});
 	}
 	
